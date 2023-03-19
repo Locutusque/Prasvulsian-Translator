@@ -7,6 +7,7 @@ Pip
 - Download source code from latest release
 - Extract the file
 - Place in a folder called "PrasvulsianTranslator" (without quotes)
+- Go to py -> model.py and set the openai.api_key to your openAI api key (you can do this by going to https://platform.openai.com/account/api-keys and getting an API key)
 - Run the "start.bat" file
 - Follow instructions on command prompt
 # Disclaimer
