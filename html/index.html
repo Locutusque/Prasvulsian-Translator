@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Prasvulsian Translator</title>
+	<style>
+		:root {
+  --background-color: #232323;
+  --primary-color: #212121;
+  --secondary-color: #3c3c3c;
+  --tertiary-color: #e91e63;
+}
+
+.chatbot-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: var(--background-color);
+  font-family: Arial, sans-serif;
+}
+
+.chatbot-header {
+  background-color: var(--primary-color);
+  padding: 10px;
+}
+
+.chatbot-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: white;
+}
+
+.chatbot-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.chat-message {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.bot-message {
+  align-self: flex-start;
+  background-color: var(--secondary-color);
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  color: white;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: var(--tertiary-color);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.chatbot-footer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--primary-color);
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+  background-color: #333333;
+  color: white;
+}
+
+#send-btn {
+  background-color: var(--tertiary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#send-btn:hover {
+  background-color: #FFA500; /* orange */
+}
+
+.settings-btn {
+  background-color: var(--tertiary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px; /* added margin to separate from input field */
+}
+
+.settings-btn:hover {
+  background-color: #FFA500; /* orange */
+}
+
+
+	</style>
+</head>
+<body>
+	<div class="chatbot-container">
+		<div class="chatbot-header">
+			<h2>Prasvulsian Translator</h2>
+		</div>
+		<div class="chatbot-body" id="chatbot-body">
+			<div class="chat-message bot-message">
+				<p>Hello! How can I help you today?</p>
+			</div>
+			<div class="chat-message user-message">
+				<p>Send the translator a message!</p>
+			</div>
+			<!-- More messages can be added here -->
+		</div>
+		<div class="chatbot-footer">
+			<form>
+				<input type="text" id="user-input" placeholder="Type your message here...">
+				<button type="submit" id="send-btn">Send</button>
+                <button id="settings-btn" class="settings-btn">Settings</button>
+			</form>
+		</div>
+	</div>
+    <script>
+        // Get the settings button element
+// Get the settings button element
+const settingsBtn = document.getElementById('settings-btn');
+
+// Add an event listener to handle button clicks
+settingsBtn.addEventListener('click', () => {
+  // Change the screen to the settings.html page
+  window.location.href = 'index';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form');
+  const input = document.querySelector('input');
+  const chatBody = document.getElementById('chatbot-body');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const message = input.value;
+    input.value = '';
+
+    const chatMessage = document.createElement('div');
+    chatMessage.classList.add('chat-message', 'user-message');
+    const chatText = document.createElement('p');
+    chatText.innerText = message;
+    chatMessage.appendChild(chatText);
+    chatBody.appendChild(chatMessage);
+
+    // add animation to chat message
+    chatMessage.style.animation = 'slideInRight 0.5s forwards';
+
+    // Make a request to the server to get the chatbot's response
+    // Make a POST request to the server to send the message
+    fetch('/send_message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: message })
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Create a new chat message for the bot's response
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('chat-message', 'bot-message');
+        const botText = document.createElement('p');
+        botText.innerText = data.bot_response;
+        botMessage.appendChild(botText);
+        chatBody.appendChild(botMessage);
+
+        // add animation to chat message
+        botMessage.style.animation = 'slideInRight 0.5s forwards';
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+});
+	</script>
+</body>
+</html>

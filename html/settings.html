@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Settings</title>
+  <style>
+    body {
+      background-color: #1e272e;
+      color: #fff;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+    input[type="file"]:hover {
+      cursor: pointer;
+    }
+    button[type="submit"] {
+      background-color: #0984e3;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #74b9ff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Change Background Image</h2>
+  <form action="" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Save</button>
+  </form>
+</body>
+</html>
