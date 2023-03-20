@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, url_for
 from model import TranslatorModel
 import os
 
@@ -7,9 +7,13 @@ class PrasvulsianTranslator:
         current_dir = os.getcwd()
 
         self.app = Flask(__name__, template_folder=f'{current_dir}\html', static_folder='static')
-        @self.app.route("/")
-        def index():
+        @self.app.route("/welcome")
+        def welcome():
             return render_template("welcome.html")
+        @self.app.route("/")
+        def welcome2():
+            return render_template("welcome.html")
+
 
         @self.app.route("/send_message", methods=["POST"])
         def on_message_send():
@@ -18,7 +22,9 @@ class PrasvulsianTranslator:
             if message != None:
                 response = TranslatorModel.send_response(message)
                 return jsonify({"user_message": message, "bot_response": response})
-
+        @self.app.route("/index")
+        def index():
+            return render_template("index.html")
 
 
         @self.app.route('/settings', methods=['GET', 'POST'])
@@ -28,7 +34,7 @@ class PrasvulsianTranslator:
                 if image:
                     filename = 'background.jpg'
                     image.save(filename)
-            return render_template('index.html')
+            return render_template('settings.html')
 if __name__ == "__main__":
     translator = PrasvulsianTranslator()
     translator.app.run(debug=True)
